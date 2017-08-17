@@ -1,10 +1,10 @@
 # Compiled class file
 *.class
 
-# Log file
+# Log files
 *.log
 
-# Package Files #
+# Package Files
 *.jar
 *.war
 *.ear
