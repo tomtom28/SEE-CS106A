@@ -23,52 +23,54 @@ public class CheckerboardKarel extends SuperKarel {
 			move();
 		}
 		
-		
-		placeEveryOtherBeeper();
-		
-		
-		positionDownwardEven();
-		placeEveryOtherBeeper();
-		
-		positionUpwardEven();
-		placeEveryOtherBeeper();
-		
-		
-		
-		positionDownwardEven();
-		placeEveryOtherBeeper();
-		
-		positionUpwardEven();
-		placeEveryOtherBeeper();
+		// Determine Even v. Odd Height
+		boolean boardHeightIsEven;
+		if (placeEveryOtherBeeper() % 2 == 0) {
+			boardHeightIsEven = true;
+			positionDownwardEven();
+		}
+		else {
+			boardHeightIsEven = false;
+			positionDownwardOdd();
+		}
 		
 		
-		
-		positionDownwardEven();
-		placeEveryOtherBeeper();
-		
-		positionUpwardEven();
-		placeEveryOtherBeeper();
-		
-		
-		
-		positionDownwardEven();
-		placeEveryOtherBeeper();
-		
-		positionUpwardEven();
-		
-		
+		// Tile rest of board depending on even or odd
+		if (boardHeightIsEven) {
+			
+			while( frontIsClear() ) {
+				placeEveryOtherBeeper();
+				positionUpwardEven();
+				placeEveryOtherBeeper();
+				positionDownwardEven();
+			}
+			
+		}
+		else {
+			
+			while( frontIsClear() ) {
+				placeEveryOtherBeeper();
+				positionUpwardOdd();
+				placeEveryOtherBeeper();
+				positionDownwardOdd();
+			}
+		}	
 		
 	}
 	
 	// Add every other beeper
-	private void placeEveryOtherBeeper(){
+	private int placeEveryOtherBeeper(){
+		int step = 0;
 		while (frontIsClear()) {
 			move();
 			putBeeper();
 			if (frontIsClear()) {
 				move();
+				step++;
 			}
+			step++;
 		}
+		return step;
 	}
 	
 	
@@ -77,15 +79,25 @@ public class CheckerboardKarel extends SuperKarel {
 		turnRight();
 		if (frontIsClear()) {
 			move();
+			
+			turnRight();
+			putBeeper();
+			if (frontIsClear()) {
+				move();
+			}
 		}
-		turnRight();
-		putBeeper();
-		if (frontIsClear()) {
-			move();
-		}
+
 	}
 	
-	
+	// Position for Downward Run by dropping first beeper
+	private void positionDownwardOdd(){
+		turnRight();
+		if (frontIsClear()) {
+			move();
+			
+			turnRight();
+		}
+	}
 	
 	
 	// Position for Downward Run by dropping first beeper
@@ -93,21 +105,28 @@ public class CheckerboardKarel extends SuperKarel {
 		turnLeft();
 		if (frontIsClear()) {
 			move();
+			
+			turnLeft();
+			putBeeper();
+			if (frontIsClear()) {
+				move();
+			}
 		}
-		turnLeft();
-		putBeeper();
-		if (frontIsClear()) {
-			move();
-		}
+
 	}
 	
 	// Position for Upward Run by dropping second beeper
-	private void positionUpwardSecondDrop(){
+	private void positionUpwardOdd(){
 		turnLeft();
 		if (frontIsClear()) {
 			move();
+			
+			turnLeft();
+			putBeeper();
+			if (frontIsClear()) {
+				move();
+			}
 		}
-		turnLeft();
 	}
 
 }
