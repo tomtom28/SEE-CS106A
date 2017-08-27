@@ -1,8 +1,7 @@
 /*
  * File: Breakout.java
  * -------------------
- * Name:
- * Section Leader:
+ * Name: Thomas Thompson
  * 
  * This file will eventually implement the game of Breakout.
  */
@@ -60,7 +59,87 @@ public class Breakout extends GraphicsProgram {
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
-		/* You fill this in, along with any subsidiary methods */
+		
+		// Initialize Game (build boxes)
+		initGame();
+		
+		// Play Game
+	}
+	
+	
+/** Builds the Game Board & Paddle. */
+	private void initGame(){
+		
+		// Draw Bricks
+		buildBricks();
+		
+		// Draw Paddle
+		drawPaddle();
+		
+	}
+	
+	
+	// Builds the Bricks (rainbow colored)
+	private void buildBricks() {
+		
+		// Iterate over each row of bricks
+		for (int i=0; i<NBRICK_ROWS; i++) {
+			
+			// Determine color of row
+			Color rowColor;
+			if (i==0 || i==1) {
+				rowColor = Color.red;
+			}
+			else if (i==2 || i==3) {
+				rowColor = Color.orange;
+			}
+			else if (i==4 || i==5) {
+				rowColor = Color.yellow;
+			}
+			else if (i==6 || i==7) {
+				rowColor = Color.green;
+			}
+			else if (i==8 || i==9) {
+				rowColor = Color.cyan;
+			}
+			else {
+				rowColor = Color.pink;
+			}
+			
+			// Iterate within each row to draw bricks
+			for (int j=0; j<NBRICKS_PER_ROW; j++) {
+				
+				// Determine Current Brick Position
+				double x = BRICK_SEP/2 + j*(BRICK_WIDTH + BRICK_SEP);
+				double y = BRICK_Y_OFFSET + i*(BRICK_HEIGHT + BRICK_SEP);
+				
+				// Create & Append Current Brick
+				GRect brick = new GRect(x, y, BRICK_WIDTH, BRICK_HEIGHT);
+				brick.setFilled(true);
+				brick.setColor(rowColor);				
+				add(brick);	
+				
+				
+			}
+			
+		}
+		
+	}
+	
+	
+	// Draws the paddle (black color)
+	private void drawPaddle() {
+		
+		// Determine Paddle Position
+		double x = WIDTH/2 - PADDLE_WIDTH/2;
+		double y = HEIGHT - PADDLE_Y_OFFSET - PADDLE_HEIGHT;
+			
+		// Create & Append Paddle
+		GRect brick = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
+		brick.setFilled(true);
+		brick.setColor(Color.black);				
+		add(brick);
+		
 	}
 
 }
