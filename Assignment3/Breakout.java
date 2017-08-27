@@ -56,9 +56,20 @@ public class Breakout extends GraphicsProgram {
 /** Number of turns */
 	private static final int NTURNS = 3;
 	
+// Game Delay for animation
+	private static final int DELAY = 10;
 	
-// Globally Scope the paddle
+	
+// Globally Scope the Paddle and Ball
 	private GRect paddle;
+	private GOval ball;
+	
+// Global Scope for Ball Velocities
+	private double vx, vy;
+	
+// Global Scope for current Turns
+	private int currTurns = NTURNS;
+	
 	
 
 /* Method: run() */
@@ -72,6 +83,7 @@ public class Breakout extends GraphicsProgram {
 		initGame();
 		
 		// Play Game
+		play();
 	}
 	
 	
@@ -83,6 +95,9 @@ public class Breakout extends GraphicsProgram {
 		
 		// Draw Paddle
 		drawPaddle();
+		
+		// Draw Ball
+		createBall();
 		
 	}
 	
@@ -165,6 +180,121 @@ public class Breakout extends GraphicsProgram {
 		// Move Paddle if within game region
 		if (leftX >= 0 && x <= rightX) {			
 			paddle.setLocation(x, y);
+		}
+		
+	}
+	
+	
+	// Create the ball
+	private void createBall() {
+		
+		// Determine start location of ball
+		double x = WIDTH/2 - BALL_RADIUS/2;
+		double y = HEIGHT/2 - BALL_RADIUS/2;
+		
+		// Create & Append Ball
+		ball = new GOval(x, y, BALL_RADIUS, BALL_RADIUS);
+		ball.setFilled(true);
+		ball.setColor(Color.black);				
+		add(ball);
+		
+		// Initialize Ball Velocities
+		RandomGenerator rgen = RandomGenerator.getInstance();
+		vx = rgen.nextDouble(1.0, 3.0);
+		if (rgen.nextBoolean(0.5)) {
+			vx = -vx;
+		}
+		vy = 3;
+		
+	}
+	
+	
+	/** Plays the Game */
+	private void play(){
+		
+		// Keeps running while turns available
+		while(currTurns > 0) {
+			
+			// Moves Ball 
+			animateBall();
+			
+			
+		}
+		
+	}
+	
+	
+	// Animate the Ball (move it)
+	private void animateBall() {
+		
+		// Move Ball
+		ball.move(vx, vy);
+		
+		// Check Collision
+		checkCollision();
+		
+		// Delay few milliseconds
+		pause(DELAY);
+		
+	}
+	
+	
+	private void checkCollision() {
+		
+		// Get ball position
+		GPoint ballPosition = ball.getLocation();
+		double ballX = ballPosition.getX();
+		double ballY = ballPosition.getY();
+
+		// Ball touches left wall
+		if (ballX <= 0) {
+			vx = -vx;
+		}
+		
+		// Ball touches right wall (account for the x,y of ball as top left of square)
+		if(ballX >= WIDTH - BALL_RADIUS*2) {
+			vx = -vx;
+		}
+		
+		// Ball touches top wall
+		if(ballY <= 0) {
+			vy = -vy;
+		}
+		
+		// Ball touches bottom wall (account for the x,y of ball as top left of square)
+		if(ballY >= HEIGHT - BALL_RADIUS*2) {
+			resetBall();
+		}
+		
+	}
+	
+	
+	// Reset Ball if hits bottom
+	private void resetBall() {
+		
+		// Decrement Turns left
+		currTurns = currTurns - 1;
+		
+		// Check for game loss
+		if (currTurns == 0) {
+			System.out.println("Game Over");
+		}
+		else {
+			System.out.println(currTurns + " Turn(s) Left!");
+			
+			// Move ball back to starting position
+			double x = WIDTH/2 - BALL_RADIUS/2;
+			double y = HEIGHT/2 - BALL_RADIUS/2;
+			ball.setLocation(x, y);
+			
+			// Reset Ball Velocities
+			RandomGenerator rgen = RandomGenerator.getInstance();
+			vx = rgen.nextDouble(1.0, 3.0);
+			if (rgen.nextBoolean(0.5)) {
+				vx = -vx;
+			}
+			vy = 3;
+			
 		}
 		
 	}
