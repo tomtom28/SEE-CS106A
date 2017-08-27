@@ -55,10 +55,18 @@ public class Breakout extends GraphicsProgram {
 
 /** Number of turns */
 	private static final int NTURNS = 3;
+	
+	
+// Globally Scope the paddle
+	private GRect paddle;
+	
 
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
+		
+		// Add Mouse Listeners
+		addMouseListeners();
 		
 		// Initialize Game (build boxes)
 		initGame();
@@ -135,10 +143,29 @@ public class Breakout extends GraphicsProgram {
 		double y = HEIGHT - PADDLE_Y_OFFSET - PADDLE_HEIGHT;
 			
 		// Create & Append Paddle
-		GRect brick = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
-		brick.setFilled(true);
-		brick.setColor(Color.black);				
-		add(brick);
+		paddle = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
+		paddle.setFilled(true);
+		paddle.setColor(Color.black);				
+		add(paddle);
+		
+	}
+	
+	
+	// Moves the paddle in response to the mouse movements
+	public void mouseMoved(MouseEvent e) {
+		
+		// Determine limitations to move
+		int leftX = 0;
+		int rightX = WIDTH - PADDLE_WIDTH;
+		
+		// Get current X (and static y)
+		double x = e.getX();
+		double y = HEIGHT - PADDLE_Y_OFFSET - PADDLE_HEIGHT;
+		
+		// Move Paddle if within game region
+		if (leftX >= 0 && x <= rightX) {			
+			paddle.setLocation(x, y);
+		}
 		
 	}
 
